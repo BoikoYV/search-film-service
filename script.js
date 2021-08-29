@@ -5,7 +5,7 @@ const movieGenre = document.querySelector('.movie__genre');
 const moviePlot = document.querySelector('.movie__plot');
 const movieWriter = document.querySelector('.movie__writer');
 const movieDirector = document.querySelector('.movie__director');
-let movieActors = document.querySelector('.movie__actors');
+const movieActors = document.querySelector('.movie__actors');
 const moviePosters = document.querySelectorAll('.movie__poster img');
 const movieErrorTitle = document.querySelector('.movie__error-title');
 const movieData = document.querySelector('.movie__data');
@@ -25,10 +25,9 @@ searchInput.addEventListener('keyup', (e) => {
             .then(data => {
                 console.log(data);
                 if (data.Title) {
-                    movieData.classList.remove('hidden');
-                    movieError.classList.add('hidden');
-                    loaderOverlay.classList.remove('loader-overlay--active');
+
                     console.log('movie object ->', data);
+                    showMovieCard();
 
                     movieActors.innerText = '';
                     movieTitle.innerText = data.Title;
@@ -55,8 +54,12 @@ searchInput.addEventListener('keyup', (e) => {
     }
 })
 
-
-
+// show movie card 
+function showMovieCard() {
+    movieData.classList.remove('hidden');
+    movieError.classList.add('hidden');
+    loaderOverlay.classList.remove('loader-overlay--active');
+}
 // show loader
 function showLoader() {
     movieData.classList.remove('hidden');
