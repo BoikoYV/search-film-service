@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div id="app">
+
+
+
+        <input id="movie-search" type="text" placeholder="Enter a movie title" class="movie__search">
+        <div id="movie-card" class="movie">
+            <!-- Loader -->
+            <div class="loader-overlay">
+                <div class="loader"></div>
+                <h2 class="">Loading data...</h2>
+            </div>
+
+            <!-- Movie data -->
+            <div class="movie__data">
+                <div class="movie__poster">
+                    <span class="movie__poster--fill">
+                        <img src="https://m.media-amazon.com/images/M/MV5BYzUzOTA5ZTMtMTdlZS00MmQ5LWFmNjEtMjE5MTczN2RjNjE3XkEyXkFqcGdeQXVyNTc2ODIyMzY@._V1_SX300.jpg"
+                            style="">
+                    </span>
+                    <span class="movie__poster--featured">
+                        <img src="https://m.media-amazon.com/images/M/MV5BYzUzOTA5ZTMtMTdlZS00MmQ5LWFmNjEtMjE5MTczN2RjNjE3XkEyXkFqcGdeQXVyNTc2ODIyMzY@._V1_SX300.jpg"
+                            style="">
+                    </span>
+                </div>
+                <div class="movie__details">
+                    <h2 class="movie__title">Matrix</h2>
+                    <ul class="movie__tags list--inline">
+                        <li class="movie__year">1993</li>
+                        <li class="movie__genre">Action, Drama, Fantasy, Thriller</li>
+                    </ul>
+                    <p class="movie__plot">Steven Matrix is one of the underworld's foremost hitmen until his luck runs
+                        out, and someone puts a contract out on him. Shot in the forehead by a .22 pistol, Matrix "dies"
+                        and finds ...</p>
+                    <div class="movie__credits">
+                        <p>
+                            <strong>Written by:</strong>
+                            <span class="movie__writer">Grenville Case</span>
+                        </p>
+                        <p>
+                            <strong>Directed by:</strong>
+                            <span class="movie__director">N/A</span>
+                        </p>
+                        <p>
+                            <strong>Starring:</strong>
+                        </p>
+                        <ul class="movie__actors list--inline">
+                            <li>Nick Mancuso</li>
+                            <li>Phillip Jarrett</li>
+                            <li>Carrie-Anne Moss</li>
+                            <li>John Vernon</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Movie error -->
+            <div class="movie__error hidden">
+                <h2 class="movie__error-title">Error</h2>
+            </div>
+
+        </div>
+    </div>
+    </div>
+    <script src="./script.js"></script>
+</body>
+
+</html>

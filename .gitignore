@@ -1,0 +1,10 @@
+.DS_Store
+# Ignore Logs
+logs
+*.log
+ds_store
+thumbs.db
+# Ignore IDE specific files
+.idea/
+.vscode/
+*.sw*
