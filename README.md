@@ -1,3 +1,5 @@
+Look [Movie service on Github Pages](https://boikoyv.github.io/search-film-service/)
+
 # Завдання
 Створити сервіс по пошуку фільмів, використовуючи [OMDB](http://www.omdbapi.com/)
 
