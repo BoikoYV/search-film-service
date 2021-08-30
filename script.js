@@ -27,25 +27,40 @@ searchInput.addEventListener('keyup', (e) => {
 
 // get information about the movie by request to the server
 function getFilmInfo(movieTitle, input) {
-    fetch(`https://www.omdbapi.com/?apikey=5de597e0&t=${movieTitle}`)
 
+    fetch(`https://www.omdbapi.com/?apikey=5de597e0&s=${movieTitle.trim()}*`)
         .then(response => response.json())
-        .then(data => {
-            if (data.Title) {
-                console.log('movie object ->', data);
-                showMovieCard(data);
+        .then(movies => {
+
+            if (!movies.Error) {
+                const id = movies.Search[0].imdbID;
+                fetch(`https://www.omdbapi.com/?apikey=5de597e0&i=${id}`)
+                    .then(response => response.json())
+                    .then(movie => {
+                        if (movie.Title) {
+                            console.log('movie object ->', movie);
+                            showMovieCard(movie);
+                        }
+                    })
+
+
+            } else {
+                console.log('error ->', movies.Error);
+                throw new Error(movies.Error);
+
             }
-            else {
-                console.log('error ->', data.Error);
-                throw new Error(data.Error);
-            }
+
         })
         .catch((error) => {
+            if (error.message === 'Too many results.') {
+                showErrorMessage('Please enter the exact title of the movie')
+                return;
+            }
             showErrorMessage(error.message);
         })
         .finally(() => {
             input.value = '';
-        });
+        })
 }
 
 // show movie card and its info
