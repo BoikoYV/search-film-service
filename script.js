@@ -62,6 +62,11 @@ function fillMovieCardWithInfo(data) {
     movieDirector.innerText = data.Director;
 
     setMoviesActors(data.Actors);
+    // some movies are without posters src
+    if (data.Poster === 'N/A') {
+        setMoviesPosters('');
+        return;
+    }
     setMoviesPosters(data.Poster);
 }
 
