@@ -12,43 +12,48 @@ const movieData = document.querySelector('.movie__data');
 const movieError = document.querySelector('.movie__error');
 const loaderOverlay = document.querySelector('.loader-overlay');
 
+// set first movie by default
+getFilmInfo('mulan', searchInput);
 
+// set movie by title from search input
 searchInput.addEventListener('keyup', (e) => {
 
     if (e.key === 'Enter') {
-
         showLoader();
-
-        fetch(`https://www.omdbapi.com/?apikey=5de597e0&t=${e.target.value}`)
-
-            .then(response => response.json())
-            .then(data => {
-                if (data.Title) {
-                    console.log('movie object ->', data);
-                    showMovieCard(data);
-                }
-                else {
-                    console.log('error ->', data.Error);
-                    throw new Error(data.Error);
-                }
-            })
-            .catch((error) => {
-                showErrorMessage(error.message);
-            })
-            .finally(() => {
-                e.target.value = '';
-            });
+        getFilmInfo(e.target.value, e.target);
     }
 })
 
 
+// get information about the movie by request to the server
+function getFilmInfo(movieTitle, input) {
+    fetch(`https://www.omdbapi.com/?apikey=5de597e0&t=${movieTitle}`)
+
+        .then(response => response.json())
+        .then(data => {
+            if (data.Title) {
+                console.log('movie object ->', data);
+                showMovieCard(data);
+            }
+            else {
+                console.log('error ->', data.Error);
+                throw new Error(data.Error);
+            }
+        })
+        .catch((error) => {
+            showErrorMessage(error.message);
+        })
+        .finally(() => {
+            input.value = '';
+        });
+}
 
 // show movie card and its info
 function showMovieCard(data) {
     movieData.classList.remove('hidden');
     movieError.classList.add('hidden');
     loaderOverlay.classList.remove('loader-overlay--active');
-    fillMovieCardWithInfo(data)
+    fillMovieCardWithInfo(data);
 }
 
 // fill movie card with info from json
