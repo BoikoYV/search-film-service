@@ -12,21 +12,37 @@ const movieData = document.querySelector('.movie__data');
 const movieError = document.querySelector('.movie__error');
 const loaderOverlay = document.querySelector('.loader-overlay');
 
+
+// get showMovieWithInfo function without call in variable for listener
+const movieWithInfoHandler = debounce(showMovieWithInfo, 3000);
+
+
 // set first movie by default
-getFilmInfo('mulan', searchInput);
+getMovieInfo('mulan', searchInput);
 
 // set movie by title from search input
-searchInput.addEventListener('keyup', (e) => {
+searchInput.addEventListener('keyup', movieWithInfoHandler)
 
-    if (e.key === 'Enter') {
-        showLoader();
-        getFilmInfo(e.target.value, e.target);
-    }
-})
 
+// get value from search input after delay -> use showMovieWithInfo callback
+function debounce(fn, ms) {
+    let timeout;
+
+    return function () {
+        const fnCall = () => { fn.apply(this, arguments) }
+        clearTimeout(timeout);
+        timeout = setTimeout(fnCall, ms);
+    };
+}
+
+// callback for debounce -> show movie card
+function showMovieWithInfo(elem) {
+    showLoader();
+    getMovieInfo(elem.target.value, elem);
+}
 
 // get information about the movie by request to the server
-function getFilmInfo(movieTitle, input) {
+function getMovieInfo(movieTitle, input) {
 
     fetch(`https://www.omdbapi.com/?apikey=5de597e0&s=${movieTitle.trim()}*`)
         .then(response => response.json())
@@ -39,7 +55,7 @@ function getFilmInfo(movieTitle, input) {
                     .then(movie => {
                         if (movie.Title) {
                             console.log('movie object ->', movie);
-                            showMovieCard(movie);
+                            showMovieWithInfoCard(movie);
                         }
                     })
 
@@ -64,7 +80,7 @@ function getFilmInfo(movieTitle, input) {
 }
 
 // show movie card and its info
-function showMovieCard(data) {
+function showMovieWithInfoCard(data) {
     movieData.classList.remove('hidden');
     movieError.classList.add('hidden');
     loaderOverlay.classList.remove('loader-overlay--active');
