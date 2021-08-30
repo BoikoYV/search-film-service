@@ -19,7 +19,7 @@ searchInput.addEventListener('keyup', (e) => {
 
         showLoader();
 
-        fetch(`http://www.omdbapi.com/?apikey=5de597e0&t=${e.target.value}`)
+        fetch(`http://www.omdbapi.com/?apikey=5de597e0&t=${e.target.value}`, { mode: 'cors' })
 
             .then(response => response.json())
             .then(data => {
