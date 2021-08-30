@@ -23,30 +23,17 @@ searchInput.addEventListener('keyup', (e) => {
 
             .then(response => response.json())
             .then(data => {
-                console.log(data);
                 if (data.Title) {
-
                     console.log('movie object ->', data);
-                    showMovieCard();
-
-                    movieActors.innerText = '';
-                    movieTitle.innerText = data.Title;
-                    movieYear.innerText = data.Year;
-                    movieGenre.innerText = data.Genre;
-                    moviePlot.innerText = data.Plot;
-                    movieWriter.innerText = data.Writer;
-                    movieDirector.innerText = data.Director;
-                    setMoviesActors(data.Actors);
-                    setMoviesPosters(data.Poster);
+                    showMovieCard(data);
                 }
                 else {
                     console.log('error ->', data.Error);
                     throw new Error(data.Error);
                 }
             })
-
             .catch((error) => {
-                setErrorMessage(error.message);
+                showErrorMessage(error.message);
             })
             .finally(() => {
                 e.target.value = '';
@@ -54,12 +41,30 @@ searchInput.addEventListener('keyup', (e) => {
     }
 })
 
-// show movie card 
-function showMovieCard() {
+
+
+// show movie card and its info
+function showMovieCard(data) {
     movieData.classList.remove('hidden');
     movieError.classList.add('hidden');
     loaderOverlay.classList.remove('loader-overlay--active');
+    fillMovieCardWithInfo(data)
 }
+
+// fill movie card with info from json
+function fillMovieCardWithInfo(data) {
+    movieActors.innerText = '';
+    movieTitle.innerText = data.Title;
+    movieYear.innerText = data.Year;
+    movieGenre.innerText = data.Genre;
+    moviePlot.innerText = data.Plot;
+    movieWriter.innerText = data.Writer;
+    movieDirector.innerText = data.Director;
+
+    setMoviesActors(data.Actors);
+    setMoviesPosters(data.Poster);
+}
+
 // show loader
 function showLoader() {
     movieData.classList.remove('hidden');
@@ -68,8 +73,9 @@ function showLoader() {
 }
 
 // set error message from API response
-function setErrorMessage(errorMessage) {
+function showErrorMessage(errorMessage) {
     movieErrorTitle.innerText = errorMessage;
+
     movieData.classList.add('hidden');
     movieError.classList.remove('hidden');
     loaderOverlay.classList.remove('loader-overlay--active');
