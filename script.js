@@ -29,6 +29,7 @@ searchInput.addEventListener('keyup', movieWithInfoHandler)
 function debounce(fn, ms) {
     let timeout;
     return function () {
+        showLoader();
         const fnCall = () => { fn.apply(this, arguments) }
         clearTimeout(timeout);
         timeout = setTimeout(fnCall, ms);
@@ -40,10 +41,12 @@ function showMovieWithInfo(elem) {
 
     showLoader();
     getMovieInfo(elem.target.value, elem.target);
+
 }
 
 // get information about the movie by request to the server
 function getMovieInfo(movieTitle, input) {
+
     showLoader();
     fetch(`https://www.omdbapi.com/?apikey=5de597e0&s=${movieTitle.trim()}*`)
         .then(response => response.json())
@@ -54,7 +57,6 @@ function getMovieInfo(movieTitle, input) {
                 fetch(`https://www.omdbapi.com/?apikey=5de597e0&i=${id}`)
                     .then(response => response.json())
                     .then((data) => {
-                        console.log(data);
                         // some movies don't have src'
                         if (data.Poster === 'N/A') {
                             return createMoviesPosters(data, '');
@@ -69,14 +71,16 @@ function getMovieInfo(movieTitle, input) {
                         if (movie.Title) {
                             console.log('movie object ->', movie);
                             showMovieWithInfoCard(movie);
+                            // clean input when movie info will be on the page
+                            input.value = '';
                         }
                     })
 
 
             } else {
                 console.log('error ->', movies.Error);
+                input.value = '';
                 throw new Error(movies.Error);
-
             }
 
         })
@@ -86,9 +90,6 @@ function getMovieInfo(movieTitle, input) {
                 return;
             }
             showErrorMessage(error.message);
-        })
-        .finally(() => {
-            input.value = '';
         })
 }
 
@@ -113,7 +114,7 @@ function fillMovieCardWithInfo(data) {
     setMoviesActors(data.Actors);
 }
 
-// show loader
+// show loader with skeleton
 function showLoader() {
     cleanMovieInfoInCard();
     movieError.classList.add('hidden');
@@ -148,7 +149,6 @@ function createMoviesPosters(data, posterSrc) {
         const smallPoster = document.createElement('img');
         const bigBlurPoster = document.createElement('img');
 
-        console.log('inside promise', posterSrc);
         smallPoster.src = posterSrc;
         bigBlurPoster.src = posterSrc;
 
@@ -157,7 +157,6 @@ function createMoviesPosters(data, posterSrc) {
         // the same image 
 
         smallPoster.addEventListener('load', function () {
-            console.log('inside listener', posterSrc);
             // return object with data for next chain (then)
             resolve(data);
         });
