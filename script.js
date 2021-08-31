@@ -14,7 +14,7 @@ const loaderOverlay = document.querySelector('.loader-overlay');
 
 
 // get showMovieWithInfo function without call in variable for listener
-const movieWithInfoHandler = debounce(showMovieWithInfo, 300);
+const movieWithInfoHandler = debounce(showMovieWithInfo, 1000);
 
 
 // set first movie by default
