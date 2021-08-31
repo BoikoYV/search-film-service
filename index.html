@@ -12,43 +12,38 @@
 <body>
     <div id="app">
 
-
-
         <input id="movie-search" type="text" placeholder="Enter a movie title" class="movie__search">
         <div id="movie-card" class="movie">
             <!-- Loader -->
-            <div class="loader-overlay">
-                <div class="loader"></div>
-                <h2 class="">Loading data...</h2>
-            </div>
+            <div class="loader-overlay"></div>
 
             <!-- Movie data -->
-            <div class="movie__data">
-                <div class="movie__poster">
+            <div class="movie__data ">
+                <div class="movie__poster ">
                     <span class="movie__poster--fill">
-                        <img src="" style="">
+                        <!-- here will be blur poster img -->
                     </span>
-                    <span class="movie__poster--featured">
-                        <img src="" style="">
+                    <span class="movie__poster--featured skeleton-box">
+                        <!-- here will be small poster img -->
                     </span>
                 </div>
                 <div class="movie__details">
-                    <h2 class="movie__title"></h2>
-                    <ul class="movie__tags list--inline">
+                    <h2 class="movie__title skeleton-box"></h2>
+                    <ul class="movie__tags list--inline skeleton-box">
                         <li class="movie__year"></li>
                         <li class="movie__genre"></li>
                     </ul>
-                    <p class="movie__plot"></p>
+                    <p class="movie__plot skeleton-box"></p>
                     <div class="movie__credits">
-                        <p>
+                        <p class="skeleton-box">
                             <strong>Written by:</strong>
                             <span class="movie__writer"></span>
                         </p>
-                        <p>
+                        <p class="skeleton-box">
                             <strong>Directed by:</strong>
                             <span class="movie__director"></span>
                         </p>
-                        <p>
+                        <p class="skeleton-box">
                             <strong>Starring:</strong>
                         </p>
                         <ul class="movie__actors list--inline">

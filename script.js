@@ -1,3 +1,4 @@
+const movieCard = document.getElementById('movie-card');
 const searchInput = document.getElementById('movie-search');
 const movieTitle = document.querySelector('.movie__title');
 const movieYear = document.querySelector('.movie__year');
@@ -10,8 +11,8 @@ const moviePosters = document.querySelectorAll('.movie__poster img');
 const movieErrorTitle = document.querySelector('.movie__error-title');
 const movieData = document.querySelector('.movie__data');
 const movieError = document.querySelector('.movie__error');
-const loaderOverlay = document.querySelector('.loader-overlay');
-
+const moviePosterFill = document.querySelector('.movie__poster--fill'); //blur poster
+const moviePosterFeatured = document.querySelector('.movie__poster--featured'); //small poster
 
 // get showMovieWithInfo function without call in variable for listener
 const movieWithInfoHandler = debounce(showMovieWithInfo, 1000);
@@ -27,7 +28,6 @@ searchInput.addEventListener('keyup', movieWithInfoHandler)
 // get value from search input after delay -> use showMovieWithInfo callback
 function debounce(fn, ms) {
     let timeout;
-
     return function () {
         const fnCall = () => { fn.apply(this, arguments) }
         clearTimeout(timeout);
@@ -37,6 +37,7 @@ function debounce(fn, ms) {
 
 // callback for debounce -> show movie card
 function showMovieWithInfo(elem) {
+
     showLoader();
     getMovieInfo(elem.target.value, elem.target);
 }
@@ -83,7 +84,7 @@ function getMovieInfo(movieTitle, input) {
 function showMovieWithInfoCard(data) {
     movieData.classList.remove('hidden');
     movieError.classList.add('hidden');
-    loaderOverlay.classList.remove('loader-overlay--active');
+    movieCard.classList.remove('skeleton-loader');
     fillMovieCardWithInfo(data);
 }
 
@@ -100,17 +101,18 @@ function fillMovieCardWithInfo(data) {
     setMoviesActors(data.Actors);
     // some movies are without posters src
     if (data.Poster === 'N/A') {
-        setMoviesPosters('');
+        createMoviesPosters('');
         return;
     }
-    setMoviesPosters(data.Poster);
+    createMoviesPosters(data.Poster);
 }
 
 // show loader
 function showLoader() {
-    movieData.classList.remove('hidden');
+    // movieData.classList.remove('hidden');
+    cleanMovieInfoInCard();
     movieError.classList.add('hidden');
-    loaderOverlay.classList.add('loader-overlay--active');
+    movieCard.classList.add('skeleton-loader');
 }
 
 // set error message from API response
@@ -119,7 +121,7 @@ function showErrorMessage(errorMessage) {
 
     movieData.classList.add('hidden');
     movieError.classList.remove('hidden');
-    loaderOverlay.classList.remove('loader-overlay--active');
+    movieCard.classList.remove('skeleton-loader');
 }
 
 // set actors into the list
@@ -133,9 +135,38 @@ function setMoviesActors(actorsStr) {
     })
 }
 
-// set new src to posters images
-function setMoviesPosters(posterSrc) {
-    return moviePosters.forEach(poster => {
-        poster.src = posterSrc;
-    })
+// create img posters with new src
+function createMoviesPosters(posterSrc) {
+
+
+    const smallPoster = document.createElement('img');
+    const bigBlurPoster = document.createElement('img');
+
+    smallPoster.src = posterSrc;
+    bigBlurPoster.src = posterSrc;
+
+    moviePosterFill.append(smallPoster);
+    moviePosterFeatured.append(bigBlurPoster);
+}
+
+//remove src attribute in posters images because of icon of broken img
+// when page is Loading
+function removeMoviesPosters() {
+    // return moviePosters.forEach(poster => {
+    //     poster.remove();
+    // })
+    moviePosterFill.innerHTML = '';
+    moviePosterFeatured.innerHTML = '';
+}
+
+
+function cleanMovieInfoInCard() {
+    movieActors.innerText = '';
+    movieTitle.innerText = '';
+    movieYear.innerText = '';
+    movieGenre.innerText = '';
+    moviePlot.innerText = '';
+    movieWriter.innerText = '';
+    movieDirector.innerText = '';
+    removeMoviesPosters();
 }
