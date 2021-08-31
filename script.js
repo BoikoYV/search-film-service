@@ -53,6 +53,18 @@ function getMovieInfo(movieTitle, input) {
                 const id = movies.Search[0].imdbID;
                 fetch(`https://www.omdbapi.com/?apikey=5de597e0&i=${id}`)
                     .then(response => response.json())
+                    .then((data) => {
+                        console.log(data);
+                        // some movies don't have src'
+                        if (data.Poster === 'N/A') {
+                            return createMoviesPosters(data, '');
+
+                        } else {
+                            // function return promise with data for next chain element
+                            // when poster images loaded  -> text info will be filled
+                            return createMoviesPosters(data, data.Poster)
+                        }
+                    })
                     .then(movie => {
                         if (movie.Title) {
                             console.log('movie object ->', movie);
@@ -99,17 +111,10 @@ function fillMovieCardWithInfo(data) {
     movieDirector.innerText = data.Director;
 
     setMoviesActors(data.Actors);
-    // some movies are without posters src
-    if (data.Poster === 'N/A') {
-        createMoviesPosters('');
-        return;
-    }
-    createMoviesPosters(data.Poster);
 }
 
 // show loader
 function showLoader() {
-    // movieData.classList.remove('hidden');
     cleanMovieInfoInCard();
     movieError.classList.add('hidden');
     movieCard.classList.add('skeleton-loader');
@@ -135,17 +140,38 @@ function setMoviesActors(actorsStr) {
     })
 }
 
-// create img posters with new src
-function createMoviesPosters(posterSrc) {
+// create img posters with new src with onload event
+function createMoviesPosters(data, posterSrc) {
 
-    const smallPoster = document.createElement('img');
-    const bigBlurPoster = document.createElement('img');
+    return new Promise(function (resolve) {
 
-    smallPoster.src = posterSrc;
-    bigBlurPoster.src = posterSrc;
+        const smallPoster = document.createElement('img');
+        const bigBlurPoster = document.createElement('img');
 
-    moviePosterFill.append(smallPoster);
-    moviePosterFeatured.append(bigBlurPoster);
+        console.log('inside promise', posterSrc);
+        smallPoster.src = posterSrc;
+        bigBlurPoster.src = posterSrc;
+
+        moviePosterFill.append(smallPoster);
+        moviePosterFeatured.append(bigBlurPoster);
+        // the same image 
+
+        smallPoster.addEventListener('load', function () {
+            console.log('inside listener', posterSrc);
+            // return object with data for next chain (then)
+            resolve(data);
+        });
+
+    });
+
+    // const smallPoster = document.createElement('img');
+    // const bigBlurPoster = document.createElement('img');
+
+    // smallPoster.src = posterSrc;
+    // bigBlurPoster.src = posterSrc;
+
+    // moviePosterFill.append(smallPoster);
+    // moviePosterFeatured.append(bigBlurPoster);
 }
 
 //remove posters images because of broken img icon when page is Loading
