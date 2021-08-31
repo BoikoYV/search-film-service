@@ -15,11 +15,11 @@ const moviePosterFill = document.querySelector('.movie__poster--fill'); //blur p
 const moviePosterFeatured = document.querySelector('.movie__poster--featured'); //small poster
 
 // get showMovieWithInfo function without call in variable for listener
-const movieWithInfoHandler = debounce(showMovieWithInfo, 1000);
+const movieWithInfoHandler = debounce(showMovieWithInfo, 500);
 
 
 // set first movie by default
-getMovieInfo('mulan', searchInput);
+getMovieInfo('mulan');
 
 // set movie by title from search input
 searchInput.addEventListener('keyup', movieWithInfoHandler)
@@ -44,8 +44,7 @@ function showMovieWithInfo(elem) {
 
 }
 
-// get information about the movie by request to the server
-function getMovieInfo(movieTitle, input) {
+function getMovieInfo(movieTitle) {
 
     showLoader();
     fetch(`https://www.omdbapi.com/?apikey=5de597e0&s=${movieTitle.trim()}*`)
@@ -57,13 +56,10 @@ function getMovieInfo(movieTitle, input) {
                 fetch(`https://www.omdbapi.com/?apikey=5de597e0&i=${id}`)
                     .then(response => response.json())
                     .then((data) => {
-                        // some movies don't have src'
+
                         if (data.Poster === 'N/A') {
                             return createMoviesPosters(data, '');
-
                         } else {
-                            // function return promise with data for next chain element
-                            // when poster images loaded  -> text info will be filled
                             return createMoviesPosters(data, data.Poster)
                         }
                     })
@@ -71,15 +67,11 @@ function getMovieInfo(movieTitle, input) {
                         if (movie.Title) {
                             console.log('movie object ->', movie);
                             showMovieWithInfoCard(movie);
-                            // clean input when movie info will be on the page
-                            input.value = '';
                         }
                     })
 
-
             } else {
                 console.log('error ->', movies.Error);
-                input.value = '';
                 throw new Error(movies.Error);
             }
 
@@ -93,7 +85,6 @@ function getMovieInfo(movieTitle, input) {
         })
 }
 
-// show movie card and its info
 function showMovieWithInfoCard(data) {
     movieData.classList.remove('hidden');
     movieError.classList.add('hidden');
@@ -101,7 +92,6 @@ function showMovieWithInfoCard(data) {
     fillMovieCardWithInfo(data);
 }
 
-// fill movie card with info from json
 function fillMovieCardWithInfo(data) {
     movieActors.innerText = '';
     movieTitle.innerText = data.Title;
@@ -114,14 +104,12 @@ function fillMovieCardWithInfo(data) {
     setMoviesActors(data.Actors);
 }
 
-// show loader with skeleton
 function showLoader() {
     cleanMovieInfoInCard();
     movieError.classList.add('hidden');
     movieCard.classList.add('skeleton-loader');
 }
 
-// set error message from API response
 function showErrorMessage(errorMessage) {
     movieErrorTitle.innerText = errorMessage;
 
@@ -130,18 +118,16 @@ function showErrorMessage(errorMessage) {
     movieCard.classList.remove('skeleton-loader');
 }
 
-// set actors into the list
 function setMoviesActors(actorsStr) {
     const actorsArr = actorsStr.split(', ');
+
     actorsArr.forEach(actor => {
         const actorEl = document.createElement('li');
         actorEl.innerText = actor;
-
         movieActors.append(actorEl);
     })
 }
 
-// create img posters with new src with onload event
 function createMoviesPosters(data, posterSrc) {
 
     return new Promise(function (resolve) {
@@ -154,7 +140,6 @@ function createMoviesPosters(data, posterSrc) {
 
         moviePosterFill.append(smallPoster);
         moviePosterFeatured.append(bigBlurPoster);
-        // the same image 
 
         smallPoster.addEventListener('load', function () {
             // return object with data for next chain (then)
@@ -163,23 +148,13 @@ function createMoviesPosters(data, posterSrc) {
 
     });
 
-    // const smallPoster = document.createElement('img');
-    // const bigBlurPoster = document.createElement('img');
-
-    // smallPoster.src = posterSrc;
-    // bigBlurPoster.src = posterSrc;
-
-    // moviePosterFill.append(smallPoster);
-    // moviePosterFeatured.append(bigBlurPoster);
 }
 
-//remove posters images because of broken img icon when page is Loading
 function removeMoviesPosters() {
     moviePosterFill.innerHTML = '';
     moviePosterFeatured.innerHTML = '';
 }
 
-// remove all movie info including posters images
 function cleanMovieInfoInCard() {
     movieActors.innerText = '';
     movieTitle.innerText = '';
