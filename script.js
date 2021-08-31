@@ -44,7 +44,7 @@ function showMovieWithInfo(elem) {
 
 // get information about the movie by request to the server
 function getMovieInfo(movieTitle, input) {
-
+    showLoader();
     fetch(`https://www.omdbapi.com/?apikey=5de597e0&s=${movieTitle.trim()}*`)
         .then(response => response.json())
         .then(movies => {
@@ -138,7 +138,6 @@ function setMoviesActors(actorsStr) {
 // create img posters with new src
 function createMoviesPosters(posterSrc) {
 
-
     const smallPoster = document.createElement('img');
     const bigBlurPoster = document.createElement('img');
 
@@ -149,17 +148,13 @@ function createMoviesPosters(posterSrc) {
     moviePosterFeatured.append(bigBlurPoster);
 }
 
-//remove src attribute in posters images because of icon of broken img
-// when page is Loading
+//remove posters images because of broken img icon when page is Loading
 function removeMoviesPosters() {
-    // return moviePosters.forEach(poster => {
-    //     poster.remove();
-    // })
     moviePosterFill.innerHTML = '';
     moviePosterFeatured.innerHTML = '';
 }
 
-
+// remove all movie info including posters images
 function cleanMovieInfoInCard() {
     movieActors.innerText = '';
     movieTitle.innerText = '';
