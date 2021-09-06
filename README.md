@@ -1,10 +1,8 @@
-Look [Movie service on Github Pages](https://boikoyv.github.io/search-film-service/)
+### Movie Search Service using [OMDB API](http://www.omdbapi.com/)
+Look implementation of Movie service on [Github Pages](https://boikoyv.github.io/search-film-service/)
 
-# Завдання
-Створити сервіс по пошуку фільмів, використовуючи [OMDB](http://www.omdbapi.com/)
-
-## Технічні вимоги
-* При натисканні на ентер по полю вводу відбувається пошук фільму
-* Інформація по знайденому фільму відображається в карточці
-* Якщо виникла помилка, наприклад немає такого фільму, то відображати її в блоці помилки
-* Додавати індикатор загрузки (loader на сторінці), поки користувач очікує на відповідь з сервера
+### Functional
+* Movies searching using debounce input
+* Information on the found film is displayed in the card
+* If an error occurs, for example, there is no such movie, then the error is displayed instead of the card
+* Show skeleton loader effect when waiting for a response from the server
